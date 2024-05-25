@@ -1,6 +1,7 @@
 import * as PDFDocument from 'pdfkit';
 import * as fs from 'fs';
 import * as path from 'path';
+import { Menu } from 'src/models/Models';
 
 function addCategory(
   doc: PDFKit.PDFDocument,
@@ -76,4 +77,45 @@ export function generatePdf(): string {
   doc.end();
 
   return filePath;
+}
+
+export function createMenu(menu: Menu): void {
+  const doc = new PDFDocument();
+  const pdfDir = path.join(__dirname, '..', '..', 'pdf');
+  const fontsDir = path.join(__dirname, '..', '..', 'assets', 'fonts');
+
+  // Assicurati che la cartella pdf esista
+  if (!fs.existsSync(pdfDir)) {
+    fs.mkdirSync(pdfDir);
+  }
+
+  const filePath = path.join(pdfDir, 'restaurant-menu.pdf');
+
+  // Crea uno stream di scrittura per il file
+  const stream = fs.createWriteStream(filePath);
+  doc.pipe(stream);
+
+  // Registra e utilizza il font personalizzato
+  const greatVibesPath = path.join(fontsDir, 'GreatVibes-Regular.ttf');
+  doc.registerFont('GreatVibes', greatVibesPath);
+
+  // Titolo del menu
+  doc.font('GreatVibes').fontSize(30).text(menu.name, {
+    align: 'center',
+  });
+  doc.moveDown(2);
+
+  // Categorie e prodotti
+  menu.categories.forEach((category) => {
+    addCategory(
+      doc,
+      category.name,
+      category.dishes.map((dish) => ({
+        name: dish.name,
+        price: `€${dish.price.toFixed(2)}`,
+      })),
+    );
+  });
+
+  doc.end();
 }

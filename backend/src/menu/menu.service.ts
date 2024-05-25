@@ -8,6 +8,6 @@ export class MenuService {
     return pdfUtils.generatePdf();
   }
   createMenu(menu: Menu): void {
-    console.log(menu);
+    pdfUtils.createMenu(menu);
   }
 }

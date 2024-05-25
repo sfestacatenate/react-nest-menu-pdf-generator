@@ -1,15 +1,24 @@
-import React, { useState } from 'react';
-import { MenuCategory, MenuDish } from '../../models/Models';
+import React, { useEffect, useState } from 'react';
+import { Menu, MenuCategory, MenuDish } from '../../models/Models';
 import useCreate from '../../hooks/useCreate';
 
 const MenuCreation: React.FC = () => {
     const [menuCategories, setMenuCategories] = useState<MenuCategory[]>([]);
-    const { create: saveMenuData, loading, error } = useCreate<MenuCategory[]>(`${process.env.REACT_APP_SERVER_URL}/menu/createmenu`);
+    const [menu, setMenu] = useState<Menu>({} as Menu); // [1
+    const { create: saveMenuData, loading, error } = useCreate<Menu>(`${process.env.REACT_APP_SERVER_URL}/menu/createmenu`);
+
+    useEffect(() => {
+        setMenu((prevMenu) => ({
+            ...prevMenu,
+            name: 'Menu',
+            categories: menuCategories
+        }));
+    }, [menuCategories]);
 
     const addMenuCategory = () => {
         const newCategory: MenuCategory = {
             id: menuCategories.length,
-            category: '',
+            name: '',
             dishes: []
         };
         setMenuCategories(prevCategories => [...prevCategories, newCategory]);
@@ -17,7 +26,7 @@ const MenuCreation: React.FC = () => {
 
     const updateCategory = (index: number, value: string) => {
         const updatedCategories = [...menuCategories];
-        updatedCategories[index].category = value;
+        updatedCategories[index].name = value;
         setMenuCategories(updatedCategories);
     };
 
@@ -46,7 +55,7 @@ const MenuCreation: React.FC = () => {
 
     const saveMenu = async () => {
         try {
-            await saveMenuData(menuCategories);
+            await saveMenuData(menu);
             alert('Menu saved on db');
         } catch (error) {
             alert('Error saving menu');
@@ -63,7 +72,7 @@ const MenuCreation: React.FC = () => {
                     <input
                         type="text"
                         placeholder="Categoria"
-                        value={category.category}
+                        value={category.name}
                         onChange={(e) => updateCategory(catIndex, e.target.value)}
                     />
                     <button onClick={() => addDish(catIndex)}>Aggiungi Piatto</button>

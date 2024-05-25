@@ -1,5 +1,6 @@
 export interface Menu {
   id: number;
+  name: string;
   categories: MenuCategory[];
 }
 

@@ -1,11 +1,12 @@
 export interface Menu {
     id: number;
+    name: string;
     categories: MenuCategory[];
 }
 
 export interface MenuCategory {
     id: number;
-    category: string;
+    name: string;
     dishes: MenuDish[];
 }
 
