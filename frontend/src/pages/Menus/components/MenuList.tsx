@@ -3,10 +3,10 @@ import { MenuDish } from '../../../models/Models';
 
 const MenuList: React.FC = () => {
     const menuItems: MenuDish[] = [
-        { name: 'Pizza', price: 5.99 },
-        { name: 'Burger', price: 3.99 },
-        { name: 'Pasta', price: 2.99 },
-        { name: 'Salad', price: 1.99 },
+        { id: 0, name: 'Pizza', price: 5.99 },
+        { id: 0, name: 'Burger', price: 3.99 },
+        { id: 0, name: 'Pasta', price: 2.99 },
+        { id: 0, name: 'Salad', price: 1.99 },
     ];
 
     return (

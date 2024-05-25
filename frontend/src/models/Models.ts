@@ -1,9 +1,16 @@
+export interface Menu {
+    id: number;
+    categories: MenuCategory[];
+}
+
 export interface MenuCategory {
-    name: string;
+    id: number;
+    category: string;
     dishes: MenuDish[];
 }
 
 export interface MenuDish {
+    id: number;
     name: string;
     price: number;
 }

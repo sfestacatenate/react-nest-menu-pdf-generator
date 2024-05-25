@@ -1,5 +1,3 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home/Home';
@@ -20,7 +18,6 @@ function App() {
         <Route path="/menus" Component={Menus} />
         <Route path="/menu-creation" Component={MenuCreation} />
       </Routes>
-      
     </BrowserRouter>
   );
 }
