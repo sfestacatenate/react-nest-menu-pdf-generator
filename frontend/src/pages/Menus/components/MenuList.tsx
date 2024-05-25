@@ -1,8 +1,8 @@
 import React from 'react';
-import { MenuItem } from '../../../models/Models';
+import { MenuDish } from '../../../models/Models';
 
 const MenuList: React.FC = () => {
-    const menuItems: MenuItem[] = [
+    const menuItems: MenuDish[] = [
         { name: 'Pizza', price: 5.99 },
         { name: 'Burger', price: 3.99 },
         { name: 'Pasta', price: 2.99 },

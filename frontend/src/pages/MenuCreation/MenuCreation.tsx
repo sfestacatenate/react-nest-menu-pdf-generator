@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
+import MenuItem from './components/MenuItem';
 
 const MenuCreation: React.FC = () => {
-    // Your component logic goes here
+    const [menuItems, setMenuItems] = useState<number[]>([]);
+
+    const addMenuItem = () => {
+        setMenuItems(prevItems => [...prevItems, prevItems.length]);
+    };
 
     return (
         <div>
-            <p>menu creation</p>
+            <p>Menu Creation</p>
+            <button onClick={addMenuItem}>+ Aggiungi Menu Item</button>
+            {menuItems.map((item, index) => (
+                <MenuItem key={index} />
+            ))}
         </div>
     );
 };
