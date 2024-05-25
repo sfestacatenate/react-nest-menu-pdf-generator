@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { MenuCategory, MenuDish } from '../../models/Models';
+import useCreate from '../../hooks/useCreate';
 
 const MenuCreation: React.FC = () => {
     const [menuCategories, setMenuCategories] = useState<MenuCategory[]>([]);
+    const { create: saveMenuData, loading, error } = useCreate<MenuCategory[]>(`${process.env.REACT_APP_SERVER_URL}/menu/createmenu`);
 
     const addMenuCategory = () => {
         const newCategory: MenuCategory = {
@@ -42,9 +44,19 @@ const MenuCreation: React.FC = () => {
         setMenuCategories(updatedCategories);
     };
 
+    const saveMenu = async () => {
+        try {
+            await saveMenuData(menuCategories);
+            alert('Menu saved on db');
+        } catch (error) {
+            alert('Error saving menu');
+        }
+    };
+
     return (
         <div>
             <p>Menu Creation</p>
+            <button onClick={() => saveMenu()}>Save Menu</button>
             <button onClick={addMenuCategory}>+ Aggiungi Categoria Menu</button>
             {menuCategories.map((category, catIndex) => (
                 <div key={catIndex} className="mt-12">
