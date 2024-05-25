@@ -1,5 +1,5 @@
 import React from 'react';
-import { MenuItem } from '../models/Models';
+import { MenuItem } from '../../../models/Models';
 
 const MenuList: React.FC = () => {
     const menuItems: MenuItem[] = [
