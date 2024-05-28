@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { MenuController } from './menu/menu.controller';
 import { MenuService } from './menu/menu.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { RestaurantMenu } from './entities/menu.entity';
 
 @Module({
   imports: [
@@ -14,9 +15,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: 'root',
       password: '12345',
       database: 'restaurants',
-      entities: [],
+      entities: [RestaurantMenu],
       synchronize: true,
     }),
+    TypeOrmModule.forFeature([RestaurantMenu]),
   ],
   controllers: [AppController, MenuController],
   providers: [AppService, MenuService],
