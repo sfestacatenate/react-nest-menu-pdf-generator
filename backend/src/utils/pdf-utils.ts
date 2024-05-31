@@ -21,91 +21,47 @@ function addCategory(
   doc.moveDown(1.5);
 }
 
-export function generatePdf(): string {
-  const doc = new PDFDocument();
-  const pdfDir = path.join(__dirname, '..', '..', 'pdf');
-  const fontsDir = path.join(__dirname, '..', '..', 'assets', 'fonts');
-
-  // Assicurati che la cartella pdf esista
-  if (!fs.existsSync(pdfDir)) {
-    fs.mkdirSync(pdfDir);
-  }
-
-  const filePath = path.join(pdfDir, 'restaurant-menu.pdf');
-
-  // Crea uno stream di scrittura per il file
-  const stream = fs.createWriteStream(filePath);
-  doc.pipe(stream);
-
-  // Registra e utilizza il font personalizzato
-  const greatVibesPath = path.join(fontsDir, 'GreatVibes-Regular.ttf');
-  doc.registerFont('GreatVibes', greatVibesPath);
-
-  // Titolo del menu
-  doc.font('GreatVibes').fontSize(30).text('Ristorante Italiano', {
-    align: 'center',
-  });
-  doc.moveDown(2);
-
-  // Categorie e prodotti
-  addCategory(doc, 'Antipasti', [
-    { name: 'Bruschetta', price: '€5.00' },
-    { name: 'Carpaccio', price: '€8.00' },
-  ]);
-
-  addCategory(doc, 'Primi Piatti', [
-    { name: 'Spaghetti Carbonara', price: '€12.00' },
-    { name: 'Lasagna', price: '€10.00' },
-  ]);
-
-  addCategory(doc, 'Secondi Piatti', [
-    { name: 'Bistecca alla Fiorentina', price: '€20.00' },
-    { name: 'Pollo alla Cacciatora', price: '€15.00' },
-  ]);
-
-  addCategory(doc, 'Dolci', [
-    { name: 'Tiramisù', price: '€6.00' },
-    { name: 'Panna Cotta', price: '€5.00' },
-  ]);
-
-  addCategory(doc, 'Vini', [
-    { name: 'Chianti', price: '€25.00' },
-    { name: 'Barolo', price: '€30.00' },
-  ]);
-
-  // Chiudi il documento PDF
-  doc.end();
-
-  return filePath;
+export function createMenu(menu: Menu, hashPdfName: string): string {
+  return createPdf(menu, hashPdfName);
 }
 
-export function createMenu(menu: Menu): void {
+export function updateMenu(menu: Menu, menuFromDb: Menu): void {
+  const oldPdfExists = fs.existsSync(
+    path.join(__dirname, '..', '..', 'pdf', menuFromDb.pdfName),
+  );
+  if (oldPdfExists) {
+    fs.unlinkSync(path.join(__dirname, '..', '..', 'pdf', menuFromDb.pdfName));
+  }
+
+  createPdf(menu, menuFromDb.pdfName);
+}
+
+export function createHashPdfName(): string {
+  return Math.random().toString(36).substring(7) + '.pdf';
+}
+
+function createPdf(menu: Menu, hashPdfName: string): string {
   const doc = new PDFDocument();
   const pdfDir = path.join(__dirname, '..', '..', 'pdf');
   const fontsDir = path.join(__dirname, '..', '..', 'assets', 'fonts');
 
-  // Assicurati che la cartella pdf esista
   if (!fs.existsSync(pdfDir)) {
     fs.mkdirSync(pdfDir);
   }
 
-  const filePath = path.join(pdfDir, 'restaurant-menu.pdf');
+  const filePath = path.join(pdfDir, hashPdfName);
 
-  // Crea uno stream di scrittura per il file
   const stream = fs.createWriteStream(filePath);
   doc.pipe(stream);
 
-  // Registra e utilizza il font personalizzato
   const greatVibesPath = path.join(fontsDir, 'GreatVibes-Regular.ttf');
   doc.registerFont('GreatVibes', greatVibesPath);
 
-  // Titolo del menu
   doc.font('GreatVibes').fontSize(30).text(menu.name, {
     align: 'center',
   });
   doc.moveDown(2);
 
-  // Categorie e prodotti
   menu.categories.forEach((category) => {
     addCategory(
       doc,
@@ -118,4 +74,5 @@ export function createMenu(menu: Menu): void {
   });
 
   doc.end();
+  return filePath;
 }

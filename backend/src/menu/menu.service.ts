@@ -12,21 +12,27 @@ export class MenuService {
     private menuRepository: Repository<RestaurantMenu>,
   ) {}
 
-  generatePdf(): string {
-    return pdfUtils.generatePdf();
+  async createMenu(menu: Menu): Promise<void> {
+    const pdfName = pdfUtils.createHashPdfName();
+    pdfUtils.createMenu(menu, pdfName);
+    menu.pdfName = pdfName;
+    await this.menuRepository.save(menu);
   }
 
-  createMenu(menu: Menu): void {
-    pdfUtils.createMenu(menu);
-    this.menuRepository.save(menu);
+  async updateMenu(menu: Menu): Promise<void> {
+    const menuFromDb = await this.menuRepository.findOne({
+      where: { id: menu.id },
+    });
+    pdfUtils.updateMenu(menu, menuFromDb);
+    await this.menuRepository.update(menu.id, menu);
   }
 
-  findAll(): Promise<Menu[]> {
-    return this.menuRepository.find();
+  async findAll(): Promise<Menu[]> {
+    return await this.menuRepository.find();
   }
 
-  findOne(id: number): Promise<Menu | null> {
-    return this.menuRepository.findOneBy({ id });
+  async findOne(id: number): Promise<Menu | null> {
+    return await this.menuRepository.findOneBy({ id });
   }
 
   async remove(id: number): Promise<void> {
