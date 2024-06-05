@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Put, Delete } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { MenuService } from './menu.service';
 import { Menu } from 'src/models/Models';
 
@@ -12,8 +21,21 @@ export class MenuController {
   }
 
   @Post('createmenu')
-  createMenu(@Body() menu: Menu): void {
-    this.menuService.createMenu(menu);
+  async createMenu(
+    @Body() menu: Menu,
+  ): Promise<{ message: string; menu: Menu }> {
+    try {
+      const createdMenu = await this.menuService.createMenu(menu);
+      return {
+        message: 'Menu created successfully',
+        menu: createdMenu,
+      };
+    } catch (error) {
+      throw new HttpException(
+        'Error creating menu',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Put('updatemenu')

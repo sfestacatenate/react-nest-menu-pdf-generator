@@ -52,6 +52,14 @@ const MenuCreation: React.FC = () => {
         setMenuCategories(updatedCategories);
     };
 
+    const handleDishPriceChange = (categoryIndex: number, dishIndex: number, value: string) => {
+        const normalizedValue = value.replace(',', '.');
+        const price = parseFloat(normalizedValue);
+        if (!isNaN(price)) {
+            updateDish(categoryIndex, dishIndex, 'price', parseFloat(price.toFixed(2)));
+        }
+    };
+
     const saveMenu = async () => {
         try {
             await saveMenuData(menu);
@@ -116,10 +124,9 @@ const MenuCreation: React.FC = () => {
                             />
                             <input
                                 className="w-1/3 px-3 py-2 mr-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                type="number"
+                                type="text"
                                 placeholder="Price"
-                                value={dish.price}
-                                onChange={(e) => updateDish(catIndex, dishIndex, 'price', parseFloat(e.target.value))}
+                                onChange={(e) => handleDishPriceChange(catIndex, dishIndex, e.target.value)}
                             />
                             <button
                                 className="px-4 py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"

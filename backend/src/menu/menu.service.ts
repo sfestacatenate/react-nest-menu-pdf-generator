@@ -12,11 +12,12 @@ export class MenuService {
     private menuRepository: Repository<RestaurantMenu>,
   ) {}
 
-  async createMenu(menu: Menu): Promise<void> {
+  async createMenu(menu: Menu): Promise<Menu> {
     const pdfName = pdfUtils.createHashPdfName();
     pdfUtils.createMenu(menu, pdfName);
     menu.pdfName = pdfName;
     await this.menuRepository.save(menu);
+    return menu;
   }
 
   async updateMenu(menu: Menu): Promise<void> {
