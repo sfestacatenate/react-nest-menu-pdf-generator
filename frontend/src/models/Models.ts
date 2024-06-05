@@ -2,6 +2,7 @@ export interface Menu {
     id: number;
     name: string;
     categories: MenuCategory[];
+    pdfName?: string;
 }
 
 export interface MenuCategory {
