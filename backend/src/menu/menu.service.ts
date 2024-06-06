@@ -20,12 +20,13 @@ export class MenuService {
     return menu;
   }
 
-  async updateMenu(menu: Menu): Promise<void> {
+  async updateMenu(menu: Menu): Promise<Menu> {
     const menuFromDb = await this.menuRepository.findOne({
       where: { id: menu.id },
     });
     pdfUtils.updateMenu(menu, menuFromDb);
     await this.menuRepository.update(menu.id, menu);
+    return menu;
   }
 
   async findAll(): Promise<Menu[]> {

@@ -21,6 +21,11 @@ export class MenuController {
     return this.menuService.findAll();
   }
 
+  @Get('getmenu/:id')
+  getMenu(@Param('id') id: number): Promise<Menu> {
+    return this.menuService.findOne(id);
+  }
+
   @Post('createmenu')
   async createMenu(
     @Body() menu: Menu,
@@ -40,8 +45,21 @@ export class MenuController {
   }
 
   @Put('updatemenu')
-  updateMenu(@Body() menu: Menu): void {
-    this.menuService.updateMenu(menu);
+  async updateMenu(
+    @Body() menu: Menu,
+  ): Promise<{ message: string; menu: Menu }> {
+    try {
+      const updatedMenu = await this.menuService.updateMenu(menu);
+      return {
+        message: 'Menu updated successfully',
+        menu: updatedMenu,
+      };
+    } catch (error) {
+      throw new HttpException(
+        'Error updating menu',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Delete('deletemenu/:id')
