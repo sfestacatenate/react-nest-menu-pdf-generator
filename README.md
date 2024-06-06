@@ -16,3 +16,11 @@ The **Restaurant Menu Management System** is a web application designed to manag
 - **Edit** existing menus.
 - **Delete** menus.
 - **Generate** and save menus as PDFs.
+
+## 📜 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## 📄 Generating PDFs
+
+PDFs are generated using the [pdfkit](https://www.npmjs.com/package/pdfkit) library.
