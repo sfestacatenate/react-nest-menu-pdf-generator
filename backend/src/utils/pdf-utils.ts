@@ -76,3 +76,10 @@ function createPdf(menu: Menu, hashPdfName: string): string {
   doc.end();
   return filePath;
 }
+
+export function removePdfFromDisk(pdfName: string): void {
+  const pdfPath = path.join(__dirname, '..', '..', 'pdf', pdfName);
+  if (fs.existsSync(pdfPath)) {
+    fs.unlinkSync(pdfPath);
+  }
+}

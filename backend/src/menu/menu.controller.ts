@@ -7,6 +7,7 @@ import {
   Delete,
   HttpException,
   HttpStatus,
+  Param,
 } from '@nestjs/common';
 import { MenuService } from './menu.service';
 import { Menu } from 'src/models/Models';
@@ -43,8 +44,9 @@ export class MenuController {
     this.menuService.updateMenu(menu);
   }
 
-  @Delete('deletemenu')
-  deleteMenu(@Body() id: number): void {
-    this.menuService.remove(id);
+  @Delete('deletemenu/:id')
+  async deleteMenu(@Param('id') id: number): Promise<number> {
+    await this.menuService.remove(id);
+    return id;
   }
 }

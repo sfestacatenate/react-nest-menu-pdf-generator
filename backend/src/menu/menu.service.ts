@@ -36,7 +36,10 @@ export class MenuService {
     return await this.menuRepository.findOneBy({ id });
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: number): Promise<number> {
+    const menu = await this.menuRepository.findOneBy({ id });
+    pdfUtils.removePdfFromDisk(menu.pdfName);
     await this.menuRepository.delete(id);
+    return id;
   }
 }

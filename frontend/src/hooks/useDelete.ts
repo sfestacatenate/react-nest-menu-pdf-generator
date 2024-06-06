@@ -1,21 +1,20 @@
 import { useState } from 'react';
 
 interface DeleteResult {
-  remove: () => Promise<void>;
-  data: boolean | null;
+  remove: (menuId: number) => Promise<number>;
   error: Error | null;
   loading: boolean;
 }
 
 const useDelete = (url: string): DeleteResult => {
-  const [data, setData] = useState<boolean | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const remove = async () => {
+  const remove = async (menuId: number): Promise<number> => {
     setLoading(true);
     try {
-      const response = await fetch(url, {
+      const completeUrl = `${url}/${menuId}`; 
+      const response = await fetch(completeUrl, {
         method: 'DELETE',
       });
 
@@ -23,15 +22,16 @@ const useDelete = (url: string): DeleteResult => {
         throw new Error('Network response was not ok');
       }
 
-      setData(true);
+      return menuId;
     } catch (error) {
       setError(error as Error);
+      return 0;
     } finally {
       setLoading(false);
     }
   };
 
-  return { remove, data, error, loading };
+  return { remove, error, loading };
 };
 
 export default useDelete;
